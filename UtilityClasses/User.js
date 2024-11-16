@@ -62,8 +62,7 @@ class User {
     // Generate a JWT token
     const token = jwt.sign(
       { userID: foundUser.UserID, email: foundUser.Email },
-      process.env.JWT_SECRET || 'your_secret_key',
-      { expiresIn: '1h' }
+      process.env.JWT_SECRET || 'your_secret_key'
     );
 
     return { message: 'Login successful', token };
