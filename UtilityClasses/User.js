@@ -1,8 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db/connection.js'; // PostgreSQL client
+import StationFinder from '../UtilityClasses/StationFinder.js';
 
 class User {
+
+  constructor(name,email){
+      this.name = name;
+      this.email = email;
+  }
+
   // Register a new user
   static async register({ name, email, phoneNumber, password }) {
     if (!name || !email || !phoneNumber || !password) {
@@ -78,6 +85,25 @@ class User {
     }
 
     return user.rows[0];
+  }
+
+  getuserdetails(){
+    console.log("Name:" + this.name + "\nEmail:" + this.email);
+  }
+
+  findStations(){
+    const station = new StationFinder();
+    const arr = station.searchNearbyStations();
+
+    arr.forEach(element => {
+       console.log("\n"+element);
+    });
+  }
+
+  findStations(filter){
+    const station = new StationFinder();
+    const arr = station.filterStations(filter);
+    return arr;
   }
 }
 
