@@ -44,6 +44,19 @@ class UserController{
         }
     }
 
+    async getStation(req,res){
+       
+       const {location,type} = req.body;
+
+       try{
+        const stationData = await User.getStationdata(location,type);
+        res.status(201).json(stationData);
+       }catch(error){
+        res.status(400).json({ message: error.message });
+       }
+
+    }
+
 }
 
 export default new UserController();
