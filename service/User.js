@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db/connection.js'; // PostgreSQL client
+import StationFinder from './userservice/StationFinder.js';
 
 class User {
 
@@ -79,6 +80,28 @@ class User {
     }
 
     return user.rows[0];
+  }
+
+  async getStationdata(location,type){
+      
+    if(!location && !type){
+
+       return StationFinder.getStations();
+
+    }else if(location && !type){
+
+       return StationFinder.searchbyLocation(location);
+
+    }else if(!location && type){
+  
+       return StationFinder.searchbyFilter(type);
+
+    }else{
+
+       return StationFinder.searchStations(location,type);
+
+    }
+
   }
 
 }
