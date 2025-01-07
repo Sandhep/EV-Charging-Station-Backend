@@ -8,6 +8,7 @@ router.get('/test', UserController.gettest);
 router.get('/user',authenticateToken, UserController.getUser);
 router.post('/login',UserController.userLogin);
 router.post('/register',UserController.userRegister);
+router.get('/stations',UserController.getStation);
 
 
 export default router;
