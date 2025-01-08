@@ -86,7 +86,7 @@ class StationFinder{
           ];
     }
 
-    searchbyLocation(location){
+    async searchbyLocation(location){
 
        return this.stationData.filter(station =>{
 
@@ -97,7 +97,7 @@ class StationFinder{
        })
     }
     
-    searchbyFilter(filter){
+    async searchbyFilter(filter){
 
         return this.stationData.filter(station =>{
 
@@ -109,7 +109,7 @@ class StationFinder{
         
     }
 
-    searchStations(location,filter){
+    async searchStations(location,filter){
 
         return this.stationData.filter(station =>{
 
@@ -123,7 +123,7 @@ class StationFinder{
 
     }
 
-    getStations(){
+    async getStations(){
         
         return this.stationData;
 

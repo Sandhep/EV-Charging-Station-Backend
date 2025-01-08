@@ -57,6 +57,52 @@ class UserController{
 
     }
 
+    async bookSlot(req,res){
+
+       const {bookingData} = req.body;
+       const userData = req.user;
+
+       try{
+        const resData = await User.bookSlot(bookingData,userData);
+        res.status(201).json({message:resData});
+       }catch(error){
+        res.status(400).json({message:error.message});
+       }
+    }
+
+    async myBookings(req,res){
+
+      const {userID} = req.user;
+
+      try{
+
+       const userBookings = await User.myBookings(userID);
+       res.status(200).json({message:userBookings});
+
+      }catch(error){
+
+        res.status(400).json({message:error.message});
+
+      }
+    }
+
+    async cancelBooking(req,res){
+       const{bookingData} = req.body;
+
+       try{
+         
+         const resData = await User.cancelBooking(bookingData);
+         res.status(200).json({message:resData});
+
+       }catch(error){
+          
+         res.status(400).json({message:error.message});
+
+       }
+    }
+
+
+
 }
 
 export default new UserController();

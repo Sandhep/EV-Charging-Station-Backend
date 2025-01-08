@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db/connection.js'; // PostgreSQL client
 import StationFinder from './userservice/StationFinder.js';
+import ReservationSystems from './userservice/ReservationSystems.js';
 
 class User {
 
@@ -86,22 +87,38 @@ class User {
       
     if(!location && !type){
 
-       return StationFinder.getStations();
+       return await StationFinder.getStations();
 
     }else if(location && !type){
 
-       return StationFinder.searchbyLocation(location);
+       return await StationFinder.searchbyLocation(location);
 
     }else if(!location && type){
   
-       return StationFinder.searchbyFilter(type);
+       return await StationFinder.searchbyFilter(type);
 
     }else{
 
-       return StationFinder.searchStations(location,type);
+       return await StationFinder.searchStations(location,type);
 
     }
 
+  }
+
+  async bookSlot(bookingData,userData){
+
+     return  await ReservationSystems.bookSlot(bookingData,userData);
+  }
+
+  async myBookings(userID){
+
+     return await ReservationSystems.viewBookingHistory(userID);
+
+  }
+
+  async cancelBooking(bookingData){
+
+     return await ReservationSystems.manageCancellations(bookingData);
   }
 
 }
