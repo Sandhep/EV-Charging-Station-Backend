@@ -50,7 +50,7 @@ class UserController{
 
        try{
         const stationData = await User.getStationdata(location,type);
-        res.status(201).json(stationData);
+        res.status(200).json(stationData);
        }catch(error){
         res.status(400).json({ message: error.message });
        }
