@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import db from '../db/connection.js'; // PostgreSQL client
 import StationFinder from './userservice/StationFinder.js';
 import ReservationSystems from './userservice/ReservationSystems.js';
+import RealTimeUpdates from './userservice/RealTimeUpdates.js';
 
 class User {
 
@@ -118,7 +119,20 @@ class User {
 
   async cancelBooking(bookingData){
 
-     return await ReservationSystems.manageCancellations(bookingData);
+     return await ReservationSystems.manageCancellations(bookingData);4
+
+  }
+
+  async notifyUser(io,resData){
+
+     return await RealTimeUpdates.sendNotification(io,resData);
+
+  }
+
+  async getNotification(notifyData){
+    
+     return RealTimeUpdates.getStationAvailability(notifyData);
+
   }
 
 }

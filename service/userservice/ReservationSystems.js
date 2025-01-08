@@ -1,3 +1,4 @@
+
 class ReservationSystem{
     async bookSlot(bookingData,userData){
 
@@ -17,7 +18,7 @@ class ReservationSystem{
       // 2.Access the Charger table with ChargerID and set status as Available
       // 3.Access bookings table set the status as Cancelled with bookingId
 
-      return 'Slot Cancelled Successfully';
+      return `Slot Available for Charger:${bookingData.ChargerID}`;
 
     }
 

@@ -1,4 +1,6 @@
 import User from "../service/User.js";
+import io from "../server.js";
+import RealTimeUpdates from "../service/userservice/RealTimeUpdates.js";
 
 class UserController{
 
@@ -92,12 +94,28 @@ class UserController{
        try{
          
          const resData = await User.cancelBooking(bookingData);
+         await User.notifyUser(io,bookingData.ChargerID);
          res.status(200).json({message:resData});
 
        }catch(error){
           
          res.status(400).json({message:error.message});
 
+       }
+    }
+
+    async notify(req,res){
+       const{notifyData} = req.body;
+
+       try{
+         
+          const resData = await User.getNotification(notifyData);
+          res.status(200).json({message:resData});
+
+       }catch(error){
+
+          res.status(400).json({message:error.message});
+          
        }
     }
 

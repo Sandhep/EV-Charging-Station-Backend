@@ -12,5 +12,6 @@ router.get('/stations',UserController.getStation);
 router.post('/bookslot',authenticateToken,UserController.bookSlot);
 router.get('/mybookings',authenticateToken,UserController.myBookings);
 router.delete('/cancelbooking',authenticateToken,UserController.cancelBooking);
+router.post('/notify',UserController.notify);
 
 export default router;

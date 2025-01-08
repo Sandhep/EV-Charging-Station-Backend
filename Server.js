@@ -1,29 +1,37 @@
-import express from 'express';
+import { createServer } from "http";
+import { Server } from "socket.io";
+import app from './app.js';
+import SocketController from "./controllers/SocketController.js";
 import dotenv from 'dotenv';
-import cors from 'cors';  // Import cors
-import User from './service/User.js';
-import authenticateToken from './middleware/authenticateToken.js';
-import router from './route/route.js';
 
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(cors());  // Enable CORS for all routes
-app.use(express.json());
-
-const corsOptions = {
-  origin: ['*'],  // Change it later to allow requests only from origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allowed HTTP methods
-  //allowedHeaders: ['Content-Type', 'Authorization'],  // Allowed headers
-};
-
-app.use(cors(corsOptions));  // Apply CORS options
-
-app.use('/api',router);
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
 });
+
+const PORT = process.env.PORT || 4000;
+
+server.listen(PORT, () => {
+    const websocketProtocol = process.env.NODE_ENV === "production" ? "wss" : "ws";
+    const httpProtocol = process.env.NODE_ENV === "production" ? "https" : "http";
+    const host = process.env.HOST || "localhost";
+
+    const websocketUrl = `${websocketProtocol}://${host}:${PORT}`;
+    const serverUrl = `${httpProtocol}://${host}:${PORT}`;
+
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`HTTP Server URL: ${serverUrl}`);
+    console.log(`WebSocket URL: ${websocketUrl}`);
+});
+
+io.on('connection', (socket) => {
+    SocketController.handleSocketConnection(socket, io);
+});
+
+export default io;
