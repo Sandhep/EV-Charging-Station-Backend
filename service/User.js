@@ -119,7 +119,7 @@ class User {
 
   async cancelBooking(bookingData){
 
-     return await ReservationSystems.manageCancellations(bookingData);4
+     return await ReservationSystems.manageCancellations(bookingData);
 
   }
 
