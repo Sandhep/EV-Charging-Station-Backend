@@ -25,6 +25,10 @@ class RealTimeUpdates {
             }
         });
     }
+
+    async sendPushNotification(){
+        
+    }
 }
 
 export default new RealTimeUpdates();
