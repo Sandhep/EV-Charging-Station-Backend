@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import db from '../db/connection.js'; // PostgreSQL client
+//import db from '../db/connection.js'; // PostgreSQL client
 import StationFinder from './userservice/StationFinder.js';
 import ReservationSystems from './userservice/ReservationSystems.js';
 import RealTimeUpdates from './userservice/RealTimeUpdates.js';
+import UserModel from '../repository/models/User.js';
 
 class User {
 
@@ -14,8 +15,15 @@ class User {
     }
 
     // Check if the user already exists
-    const userExistsQuery = 'SELECT * FROM users WHERE "Email" = $1';
-    const userExists = await db.query(userExistsQuery, [email]);
+    //const userExistsQuery = 'SELECT * FROM users WHERE "Email" = $1';
+    //const userExists = await db.query(userExistsQuery, [email]);
+
+    const userExists = await UserModel.findOne({
+      where: {
+        Email: email,
+      },
+    });
+    
 
     if (userExists.rows.length > 0) {
       throw new Error('User already exists');
@@ -25,18 +33,26 @@ class User {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert the new user into the database
-    const insertUserQuery = `
+   /* const insertUserQuery = `
       INSERT INTO users ("Name", "Email", "PhoneNumber", "PasswordHash", "Role", "LoyaltyPoints")
       VALUES ($1, $2, $3, $4, 'user', 0)
       RETURNING *;
     `;
-    const newUser = await db.query(insertUserQuery, [
+
+      const newUser = await db.query(insertUserQuery, [
       name,
       email,
       phoneNumber,
       hashedPassword,
     ]);
-
+   */
+    const newUser = await UserModel.create({
+      Name: name,
+      Email: email,
+      PhoneNumber: phoneNumber,
+      PasswordHash:hashedPassword
+    });
+    
     return newUser.rows[0]; // Return the newly created user object
   }
 
@@ -47,9 +63,15 @@ class User {
     }
 
     // Find the user by email
-    const findUserQuery = 'SELECT * FROM users WHERE "Email" = $1';
-    const user = await db.query(findUserQuery, [email]);
-
+   // const findUserQuery = 'SELECT * FROM users WHERE "Email" = $1';
+    //const user = await db.query(findUserQuery, [email]);
+    
+    const user = await UserModel.findOne({
+      where: {
+        Email: email,
+      },
+    });
+    
     if (user.rows.length === 0) {
       throw new Error('Invalid credentials');
     }
@@ -74,8 +96,16 @@ class User {
 
   // Fetch a user's profile (protected by JWT)
   async getProfile(userID) {
-    const getUserQuery = 'SELECT * FROM users WHERE "UserID" = $1';
-    const user = await db.query(getUserQuery, [userID]);
+
+    //const getUserQuery = 'SELECT * FROM users WHERE "UserID" = $1';
+    //const user = await db.query(getUserQuery, [userID]);
+
+    const user = await UserModel.findOne({
+      where: {
+        UserID: userID,
+      },
+    });
+    
 
     if (user.rows.length === 0) {
       throw new Error('User not found');

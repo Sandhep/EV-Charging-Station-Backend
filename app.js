@@ -3,8 +3,11 @@ import dotenv from 'dotenv';
 import cors from 'cors'; 
 import bodyParser from 'body-parser';
 import router from './route/route.js';
+import database from './repository/Database.js';
 
 dotenv.config();
+
+database.initialise();
 
 const app = express();
 
