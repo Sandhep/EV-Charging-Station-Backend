@@ -4,17 +4,12 @@ import RealTimeUpdates from "../service/userservice/RealTimeUpdates.js";
 
 class UserController{
 
-    async gettest(req,res){
-        res.send("SUCCESS");
-    }
-
     async getUser(req,res){
        
        const{userID} = req.user;
 
        try {
             const user = await User.getProfile(userID);
-            //console.log(user);
             res.status(200).json(user);
           } catch (error) {
             res.status(404).json({ message: error.message });
@@ -48,7 +43,7 @@ class UserController{
 
     async getStation(req,res){
        
-       const {location,type} = req.body;
+       const {location,type} = req.query;
 
        try{
         const stationData = await User.getStationdata(location,type);
