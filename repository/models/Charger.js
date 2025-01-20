@@ -37,13 +37,13 @@ export default (sequelize, DataTypes) => {
     });
 
     Charger.associate = (models) => {
-        Charger.belongsTo(models.ChargingStation, {
-          foreignKey: 'StationID',
-          targetKey: 'StationID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-      };
-  
+      Charger.belongsTo(models.ChargingStation, {
+        foreignKey: 'StationID',
+        as: 'Station',
+        onDelete: 'CASCADE',
+      });
+    };
+
     return Charger;
   };
   

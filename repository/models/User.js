@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define("User", {
+  const UserModel = sequelize.define("User", {
     UserID: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -45,5 +45,5 @@ export default (sequelize, DataTypes) => {
     updatedAt: 'UpdatedAt',
   });
 
-  return User;
+  return UserModel;
 };

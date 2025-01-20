@@ -49,6 +49,14 @@ export default (sequelize, DataTypes) => {
       createdAt: 'CreatedAt', // Custom field name for createdAt
       updatedAt: 'UpdatedAt', // Custom field name for updatedAt
     });
+
+    ChargingStation.associate = (models) => {
+      ChargingStation.hasMany(models.Charger, {
+        foreignKey: 'StationID',
+        as: 'Chargers',
+        onDelete: 'CASCADE',
+      });
+    };
   
     return ChargingStation;
   };

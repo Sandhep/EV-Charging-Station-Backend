@@ -48,14 +48,14 @@ export default (sequelize, DataTypes) => {
     });
 
     ChargingSession.associate = (models) => {
-        ChargingSession.belongsTo(models.Booking, {
-          foreignKey: 'BookingID',
-          targetKey: 'BookingID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-      };
-      
-  
+      ChargingSession.belongsTo(models.Booking, {
+        foreignKey: 'BookingID',
+        targetKey: 'BookingID',
+        onDelete: 'CASCADE', // Optional: define behavior on delete
+      });
+    };
+    
+
     return ChargingSession;
   };
   

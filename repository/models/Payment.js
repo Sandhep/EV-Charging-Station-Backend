@@ -53,7 +53,6 @@ export default (sequelize, DataTypes) => {
           onDelete: 'CASCADE', // Optional: define behavior on delete
         });
     };
-      
   
     return Payment;
   };

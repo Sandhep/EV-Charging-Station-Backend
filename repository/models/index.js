@@ -1,6 +1,6 @@
 // models/index.js
 import { Sequelize, DataTypes } from "sequelize";
-import User from "./User.js";
+import UserModel from "./User.js";
 import Booking from "./Booking.js";
 import Charger from "./Charger.js";
 import ChargingSession from "./ChargingSession.js";
@@ -33,7 +33,7 @@ const sequelize = new Sequelize(
 
 // Initialize models
 const db = {
-  User: User(sequelize, DataTypes),
+  UserModel: UserModel(sequelize, DataTypes),
   Vehicle:Vehicle(sequelize, DataTypes),
   Payment:Payment(sequelize, DataTypes),
   Booking:Booking(sequelize, DataTypes),
@@ -43,5 +43,13 @@ const db = {
   sequelize,
   Sequelize,
 };
+
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
 
 export default db;

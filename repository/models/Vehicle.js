@@ -45,15 +45,15 @@ export default (sequelize, DataTypes) => {
       createdAt: 'CreatedAt', // Custom field name for createdAt
       updatedAt: 'UpdatedAt', // Custom field name for updatedAt
     });
-
+    
     Vehicle.associate = (models) => {
-        Vehicle.belongsTo(models.User, {
-          foreignKey: 'UserID',
-          targetKey: 'UserID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-      };
-      
+      Vehicle.belongsTo(models.UserModel, {
+        foreignKey: 'UserID',
+        targetKey: 'UserID',
+        onDelete: 'CASCADE', // Optional: define behavior on delete
+      });
+    };
+    
   
     return Vehicle;
   };

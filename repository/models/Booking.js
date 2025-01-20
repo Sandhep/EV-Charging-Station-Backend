@@ -50,26 +50,26 @@ export default (sequelize, DataTypes) => {
     });
 
     Booking.associate = (models) => {
-        Booking.belongsTo(models.User, {
-          foreignKey: 'UserID',
-          targetKey: 'UserID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
+      Booking.belongsTo(models.UserModel, {
+        foreignKey: 'UserID',
+        targetKey: 'UserID',
+        onDelete: 'CASCADE', // Optional: define behavior on delete
+      });
+    
+      Booking.belongsTo(models.Charger, {
+        foreignKey: 'ChargerID',
+        targetKey: 'ChargerID',
+        onDelete: 'CASCADE', // Optional: define behavior on delete
+      });
+    
+      Booking.belongsTo(models.Vehicle, {
+        foreignKey: 'VehicleID',
+        targetKey: 'VehicleID',
+        onDelete: 'CASCADE', // Optional: define behavior on delete
+      });
       
-        Booking.belongsTo(models.Charger, {
-          foreignKey: 'ChargerID',
-          targetKey: 'ChargerID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-      
-        Booking.belongsTo(models.Vehicle, {
-          foreignKey: 'VehicleID',
-          targetKey: 'VehicleID',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-      };
-      
-  
+    };
+
     return Booking;
   };
   
