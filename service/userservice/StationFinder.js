@@ -17,16 +17,16 @@ class StationFinder{
       return Stations;
     }
     
-    async searchbyFilter(filter){
+    async searchbyFilter(filter){  
 
-      const Stations = await db.Charger.findAll({
-        where:{Type:filter},
+      const Stations = await db.ChargingStation.findAll({
         include: {
-          model: db.ChargingStation,
-          as:"Station",
-          attributes: ['StationID','Name', 'Location','Address'], 
+          model: db.Charger,
+          as:"Chargers",
+          where:{Type:filter},
+          attributes: ['ChargerID', 'Type', 'Capacity', 'Status'],
         },
-        attributes: ['ChargerID', 'Type', 'Capacity', 'Status'], 
+        attributes: ['StationID','Name', 'Location','Address']
       });
 
       return Stations;
