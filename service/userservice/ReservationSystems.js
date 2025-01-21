@@ -1,78 +1,60 @@
+import db from "../../repository/models/index.js";
 
-class ReservationSystem{
+class ReservationSystem {
+
     async bookSlot(bookingData,userData){
 
-      console.log(bookingData);
-      console.log(userData);
+      const newBooking = await db.Booking.create({
+        UserID: userData.userID,
+        ChargerID: bookingData.ChargerID,
+        VehicleID: bookingData.VehicleID,
+        StartTime: bookingData.StartTime,
+        EndTime: bookingData.EndTime,
+        Status: 'Booked'
+      });
 
-      // 1.Update the Charger Table with status - 'Booked' using chargerId & stationId.
-      // 2.Create a new record in Bookings Table using bookingData & userData.
+      await db.Charger.update(
+        { Status: 'Booked' },
+        {
+          where: {
+            ChargerID:bookingData.ChargerID, 
+          },
+        }
+      );
 
-      return 'Slot Booked Successfully';
+      return newBooking;
     }
 
     async manageCancellations(bookingData){
 
-      console.log(bookingData);
+      await db.Booking.update(
+        { Status: 'Cancelled' },
+        {
+          where: {
+            BookingID: bookingData.BookingID, 
+          },
+        }
+      );
 
-      // 2.Access the Charger table with ChargerID and set status as Available
-      // 3.Access bookings table set the status as Cancelled with bookingId
+      await db.Charger.update(
+        { Status: 'Active' },
+        {
+          where: {
+            ChargerID:bookingData.ChargerID, 
+          },
+        }
+      );
 
-      return `Slot Available for Charger:${bookingData.ChargerID}`;
+      return 'Slot Cancelled Successfully !';
 
     }
 
     async viewBookingHistory(userId){
 
-       // 1.Get bookings data of specific user using their userId in Bookings Table
-
-       const bookingData = [
-        {
-          "UserID": "a2fa41b1-dbd4-4264-9955-9eeef12988e6",
-          "BookingID": "256",
-          "ChargerID": "22",
-          "VehicleID": "323",
-          "StartTime": "10.00",
-          "EndTime": "11.00",
-          "Status": "Booked"
-        },
-        {
-          "UserID": "a2fa41b1-dbd4-4264-9955-9eeef12988e6",
-          "BookingID": "257",
-          "ChargerID": "23",
-          "VehicleID": "324",
-          "StartTime": "11.00",
-          "EndTime": "12.00",
-          "Status": "Completed"
-        },
-        {
-          "UserID": "a2fa41b1-dbd4-4264-9955-9eeef12988e6",
-          "BookingID": "258",
-          "ChargerID": "24",
-          "VehicleID": "325",
-          "StartTime": "12.00",
-          "EndTime": "13.00",
-          "Status": "Cancelled"
-        },
-        {
-          "UserID": "a2fa41b1-dbd4-4264-9955-9eeef12988e6",
-          "BookingID": "259",
-          "ChargerID": "25",
-          "VehicleID": "326",
-          "StartTime": "13.00",
-          "EndTime": "14.00",
-          "Status": "Completed"
-        },
-        {
-          "UserID": "a2fa41b1-dbd4-4264-9955-9eeef12988e6",
-          "BookingID": "260",
-          "ChargerID": "26",
-          "VehicleID": "327",
-          "StartTime": "14.00",
-          "EndTime": "15.00",
-          "Status": "Booked"
-        }
-      ];
+       const bookingData = await db.Booking.findAll({
+          where:{UserID:userId},
+          attributes :['BookingID','ChargerID','VehicleID','StartTime','EndTime','Status']
+       })
 
        return bookingData;
     }
