@@ -80,6 +80,17 @@ class User {
     return user;
   }
 
+  async getVehicles(userID){
+
+      const vehicle = await db.Vehicle.findAll({
+        where:{
+          UserID:userID
+        },
+      })
+
+      return vehicle;
+  }
+
   async getStationdata(location,type){
       
     if(!location && !type){

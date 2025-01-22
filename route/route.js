@@ -12,5 +12,6 @@ router.post('/bookslot',authenticateToken,UserController.bookSlot);
 router.get('/mybookings',authenticateToken,UserController.myBookings);
 router.patch('/cancelbooking',authenticateToken,UserController.cancelBooking);
 router.post('/notify',UserController.notify);
+router.get('/getvehicles',authenticateToken,UserController.getVehicles);
 
 export default router;

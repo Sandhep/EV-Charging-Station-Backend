@@ -42,6 +42,11 @@ export default (sequelize, DataTypes) => {
         as: 'Station',
         onDelete: 'CASCADE',
       });
+
+      Charger.hasMany(models.Booking, { 
+        foreignKey: "ChargerID", 
+        as: "Bookings" 
+      });
     };
 
     return Charger;

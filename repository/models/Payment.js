@@ -49,7 +49,7 @@ export default (sequelize, DataTypes) => {
     Payment.associate = (models) => {
         Payment.belongsTo(models.Booking, {
           foreignKey: 'BookingID',
-          targetKey: 'BookingID',
+          as: 'Booking',
           onDelete: 'CASCADE', // Optional: define behavior on delete
         });
     };

@@ -114,6 +114,22 @@ class UserController{
        }
     }
 
+    async getVehicles(req,res){
+
+       const {userID} = req.user;
+
+       try{
+
+        const userVehicles = await User.getVehicles(userID);
+        res.status(200).json(userVehicles);
+ 
+       }catch(error){
+ 
+         res.status(400).json({message:error.message});
+ 
+       }
+    }
+
 
 
 }

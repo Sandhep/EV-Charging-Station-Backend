@@ -8,8 +8,9 @@ class ReservationSystem {
         UserID: userData.userID,
         ChargerID: bookingData.ChargerID,
         VehicleID: bookingData.VehicleID,
-        StartTime: bookingData.StartTime,
-        EndTime: bookingData.EndTime,
+        Time: bookingData.Time,
+        Duration: bookingData.Duration,
+        Date: bookingData.Date,
         Status: 'Booked'
       });
 
@@ -27,23 +28,27 @@ class ReservationSystem {
 
     async manageCancellations(bookingData){
 
-      await db.Booking.update(
-        { Status: 'Cancelled' },
-        {
-          where: {
-            BookingID: bookingData.BookingID, 
+      // Fetch the booking data with its associated Charger
+        const booking = await db.Booking.findOne({
+          where: { BookingID: bookingData.BookingID },
+          include: {
+            model: db.Charger,
+            as: "Charger",
           },
-        }
-      );
+        });
 
-      await db.Charger.update(
-        { Status: 'Active' },
-        {
-          where: {
-            ChargerID:bookingData.ChargerID, 
-          },
+        // Ensure the booking exists before proceeding
+        if (booking) {
+          // Update the booking's status
+          await booking.update({ Status: "Cancelled" });
+
+          // Update the associated charger's status
+          if (booking.Charger) {
+            await booking.Charger.update({ Status: "Available" });
+          }
+        } else {
+          console.error("Booking not found!");
         }
-      );
 
       return 'Slot Cancelled Successfully !';
 
@@ -51,11 +56,28 @@ class ReservationSystem {
 
     async viewBookingHistory(userId){
 
-       const bookingData = await db.Booking.findAll({
-          where:{UserID:userId},
-          attributes :['BookingID','ChargerID','VehicleID','StartTime','EndTime','Status']
-       })
-
+      const bookingData = await db.Booking.findAll({
+        where: { UserID: userId },
+        include: [
+          {
+            model: db.Charger,
+            as: "Charger",
+            include:{
+              model : db.ChargingStation,
+              as:"Station",
+              attributes:['StationID','Name']
+            },
+            attributes: ["Type", "Capacity"],
+          },
+          {
+            model: db.Vehicle,
+            as: "Vehicle",
+            attributes: ["Make", "Model"],
+          },
+        ],
+        attributes: ["BookingID","ChargerID","VehicleID","Time","Date","Duration","Status",],
+      });
+      
        return bookingData;
     }
 }

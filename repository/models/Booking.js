@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
       },
       UserID: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
         validate: {
           notEmpty: true, // Ensures no empty strings are allowed
@@ -27,37 +27,26 @@ export default (sequelize, DataTypes) => {
           notEmpty: true, // Ensures no empty strings are allowed
         },
       },
-      StartTime: {
-        type: DataTypes.DATE,
+      Time: {
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isDate: true, // Ensures the value is a valid date
-        },
-        get() {
-          // Format StartTime when retrieved
-          const rawValue = this.getDataValue("StartTime");
-          return rawValue ? rawValue.toISOString() : null;
-        },
-        set(value) {
-          // Parse and set StartTime as a valid date object
-          this.setDataValue("StartTime", new Date(value));
-        },
+          notEmpty: true, 
+        }
       },
-      EndTime: {
+      Duration: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true, 
+        }
+      },
+      Date: {
         type: DataTypes.DATE,
         allowNull: false,
         validate: {
           isDate: true, // Ensures the value is a valid date
-        },
-        get() {
-          // Format EndTime when retrieved
-          const rawValue = this.getDataValue("EndTime");
-          return rawValue ? rawValue.toISOString() : null;
-        },
-        set(value) {
-          // Parse and set EndTime as a valid date object
-          this.setDataValue("EndTime", new Date(value));
-        },
+        }
       },
       Status: {
         type: DataTypes.STRING,
@@ -80,13 +69,13 @@ export default (sequelize, DataTypes) => {
 
     Booking.belongsTo(models.Charger, {
       foreignKey: "ChargerID",
-      targetKey: "ChargerID",
+      as: "Charger",
       onDelete: "CASCADE", // Optional: define behavior on delete
     });
 
     Booking.belongsTo(models.Vehicle, {
       foreignKey: "VehicleID",
-      targetKey: "VehicleID",
+      as: "Vehicle",
       onDelete: "CASCADE", // Optional: define behavior on delete
     });
   };
