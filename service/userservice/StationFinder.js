@@ -4,61 +4,61 @@ class StationFinder{
 
     async searchbyLocation(location){
 
-      const Stations = await db.ChargingStation.findAll({
-        where: { Location: location }, 
-        include: {
-          model: db.Charger,
-          as:"Chargers",
-          attributes: ['ChargerID', 'Type', 'Capacity', 'Status'],
+      const Stations = await db.Charger.findAll({
+        include:{
+          model : db.ChargingStation,
+          as:"Station",
+          where: { Location: location },
+          attributes:['StationID','Name', 'Location','Address']
         },
-        attributes: ['StationID','Name', 'Location','Address']
-      });
-      
+        attributes: ['ChargerID', 'Type', 'Capacity', 'Status']
+     })
+     
       return Stations;
     }
     
     async searchbyFilter(filter){  
 
-      const Stations = await db.ChargingStation.findAll({
-        include: {
-          model: db.Charger,
-          as:"Chargers",
-          where:{Type:filter},
-          attributes: ['ChargerID', 'Type', 'Capacity', 'Status'],
+      const Stations = await db.Charger.findAll({
+        where:{ Type: filter },
+        include:{
+          model : db.ChargingStation,
+          as:"Station",
+          attributes:['StationID','Name', 'Location','Address']
         },
-        attributes: ['StationID','Name', 'Location','Address']
-      });
-
+        attributes: ['ChargerID', 'Type', 'Capacity', 'Status']
+     })
+     
       return Stations;
         
     }
 
     async searchStations(location,filter){
 
-      const Stations = await db.ChargingStation.findAll({
-        where: { Location: location }, 
-        include: {
-          model: db.Charger,
-          as:"Chargers",
-          where:{ Type: filter },
-          attributes: ['ChargerID', 'Type', 'Capacity', 'Status'],
+      const Stations = await db.Charger.findAll({
+        where:{ Type: filter },
+        include:{
+          model : db.ChargingStation,
+          as:"Station",
+          where: { Location: location },
+          attributes:['StationID','Name', 'Location','Address']
         },
-        attributes: ['StationID','Name', 'Location','Address']
-      });
-
+        attributes: ['ChargerID', 'Type', 'Capacity', 'Status']
+     })
+     
       return Stations;
     }
 
     async getStations(){
 
-      const Stations = await db.ChargingStation.findAll({
-        include: {
-          model: db.Charger,
-          as:"Chargers",
-          attributes: ['ChargerID', 'Type', 'Capacity', 'Status'],
-        },
-        attributes: ['StationID','Name', 'Location','Address']
-      });
+      const Stations = await db.Charger.findAll({
+         include:{
+           model : db.ChargingStation,
+           as:"Station",
+           attributes:['StationID','Name', 'Location','Address']
+         },
+         attributes: ['ChargerID', 'Type', 'Capacity', 'Status']
+      })
       
       return Stations;
 

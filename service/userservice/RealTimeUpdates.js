@@ -1,4 +1,5 @@
 class RealTimeUpdates {
+
     constructor() {
         this.users = new Map(); // Stores UserID -> ChargerID pairs
     }
@@ -25,7 +26,7 @@ class RealTimeUpdates {
             }
         });
     }
-
+    // Firebase Cloud Messaging
     async sendPushNotification(){
         
     }
