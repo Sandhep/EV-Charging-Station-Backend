@@ -1,10 +1,17 @@
 export default (sequelize, DataTypes) => {
     const ChargingSession = sequelize.define("ChargingSession", {
       SessionID: {
-        type: DataTypes.STRING, // or DataTypes.UUID if you want to use UUIDs
+        type: DataTypes.UUID, // or DataTypes.UUID if you want to use UUIDs
         primaryKey: true,
       },
       BookingID: {
+        type: DataTypes.UUID, // or DataTypes.UUID if this refers to a UUID
+        allowNull: true,
+        validate: {
+          notEmpty: true, // Ensures no empty strings are allowed
+        },
+      },
+      ChargerID: {
         type: DataTypes.STRING, // or DataTypes.UUID if this refers to a UUID
         allowNull: false,
         validate: {
