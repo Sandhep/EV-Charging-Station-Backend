@@ -1,3 +1,5 @@
+import ChargingSessionMonitoring from "../service/userservice/ChargingSessionMonitoring.js";
+
 class SocketController {
  
     async handleSocketConnection(socket, io) {
@@ -20,13 +22,28 @@ class SocketController {
 
         });
 
-        socket.on('disconnect', (reason) => {
+        const ChargingSession = new ChargingSessionMonitoring(socket,io);
 
-            console.log(`Client disconnected: ${socket.id}, Reason: ${reason}`);
-            
+        // Handle startCharging event
+        socket.on("startCharging", async (data) => {
+            await ChargingSession.startCharging(data);
         });
 
-        socket.send('Welcome to the WebSocket server!');
+        // Handle stopCharging event
+        socket.on("stopCharging", async (data) => {
+            await ChargingSession.stopCharging(data);
+        });
+
+        // Handle disconnect event
+        socket.on("disconnect", async () => {
+            console.log("User disconnected:", socket.id);
+            const sessionData = await ChargingSession.cleanupOnDisconnect();
+            io.to(socket.id).emit("userDisconnected", {
+                message: "User has been disconnected and sessions cleaned up.",
+                sessionData,
+            });
+        });
+
     }
 }
 
