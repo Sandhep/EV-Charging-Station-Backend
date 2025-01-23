@@ -89,7 +89,6 @@ class UserController{
        try{
          
          const resData = await User.cancelBooking(bookingData);
-         await User.notifyUser(io,bookingData.ChargerID);
          res.status(200).json({message:resData});
 
        }catch(error){
@@ -129,6 +128,9 @@ class UserController{
  
        }
     }
+
+
+    
 
 
 
