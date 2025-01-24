@@ -16,4 +16,20 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-export default authenticateToken;
+const authenticateSocketToken = (socket, next) => {
+  const token = socket.handshake.auth.token; // Get token from the socket handshake
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return next(new Error('Authentication error'));
+      }
+      socket.user = user; 
+      next(); 
+    });
+  } else {
+    next(new Error('Authentication error: No token provided'));
+  }
+}
+
+export {authenticateToken,authenticateSocketToken};
