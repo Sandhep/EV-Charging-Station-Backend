@@ -14,6 +14,7 @@ class ChargingSessionMonitoring {
       const startTime = new Date();
 
       this.activeSessions[sessionId] = {
+          UserID:this.socket.user.userID,
           ChargerID,
           BookingID,
           StationID,
@@ -84,6 +85,7 @@ class ChargingSessionMonitoring {
   async saveSessionToDatabase(sessionId, session, endTime) {
     try {
       await db.ChargingSession.create({
+        UserID:session.UserID,
         SessionID: sessionId,
         BookingID: session.BookingID,
         ChargerID: session.ChargerID,

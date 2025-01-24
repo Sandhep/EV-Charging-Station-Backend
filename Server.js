@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import app from './app.js';
 import SocketController from "./controllers/SocketController.js";
 import dotenv from 'dotenv';
+import { authenticateSocketToken } from "./middleware/authenticateToken.js";
 
 dotenv.config();
 
@@ -29,6 +30,8 @@ server.listen(PORT, () => {
     console.log(`HTTP Server URL: ${serverUrl}`);
     console.log(`WebSocket URL: ${websocketUrl}`);
 });
+
+io.use(authenticateSocketToken);
 
 io.on('connection', (socket) => {
     SocketController.handleSocketConnection(socket, io);
