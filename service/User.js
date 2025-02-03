@@ -59,7 +59,8 @@ class User {
 
     const token = jwt.sign(
       { userID: user.UserID, email: user.Email },
-      process.env.JWT_SECRET || 'your_secret_key'
+       process.env.JWT_ACCESS_SECRET,
+      { expiresIn: '7d' }
     );
 
     return { message: 'Login successful', token };
@@ -71,6 +72,7 @@ class User {
       where: {
         UserID: userID,
       },
+      attributes:['UserID','Name','Role','Email','PhoneNumber']
     });
     
     if (!user) {

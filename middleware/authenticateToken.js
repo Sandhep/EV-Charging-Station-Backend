@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, user) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
@@ -20,7 +20,7 @@ const authenticateSocketToken = (socket, next) => {
   const token = socket.handshake.auth.token; // Get token from the socket handshake
 
   if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, user) => {
       if (err) {
         return next(new Error('Authentication error'));
       }
