@@ -3,13 +3,18 @@ export default (sequelize, DataTypes) => {
       PaymentID: {
         type: DataTypes.STRING, // or DataTypes.UUID if you want to use UUIDs
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4
       },
-      BookingID: {
-        type: DataTypes.STRING, // or DataTypes.UUID if this refers to a UUID
+      SessionID: {
+        type: DataTypes.UUID, // or DataTypes.UUID if this refers to a UUID
         allowNull: false,
         validate: {
           notEmpty: true, // Ensures no empty strings are allowed
         },
+      },
+      BookingID: {
+        type: DataTypes.STRING, // or DataTypes.UUID if this refers to a UUID
+        allowNull: true,
       },
       Amount: {
         type: DataTypes.FLOAT,
@@ -45,14 +50,6 @@ export default (sequelize, DataTypes) => {
       createdAt: 'CreatedAt', // Custom field name for createdAt
       updatedAt: 'UpdatedAt', // Custom field name for updatedAt
     });
-
-    Payment.associate = (models) => {
-        Payment.belongsTo(models.Booking, {
-          foreignKey: 'BookingID',
-          as: 'Booking',
-          onDelete: 'CASCADE', // Optional: define behavior on delete
-        });
-    };
   
     return Payment;
   };

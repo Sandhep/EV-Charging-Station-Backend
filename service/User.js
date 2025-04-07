@@ -4,6 +4,8 @@ import StationFinder from './userservice/StationFinder.js';
 import ReservationSystems from './userservice/ReservationSystems.js';
 import RealTimeUpdates from './userservice/RealTimeUpdates.js';
 import db from '../repository/models/index.js';
+import VehicleService from './userservice/VehicleService.js';
+import BillingPayment from './userservice/BillingPayment.js';
 
 class User {
 
@@ -58,7 +60,7 @@ class User {
     }
 
     const token = jwt.sign(
-      { userID: user.UserID, email: user.Email },
+      { userID: user.UserID, email: user.Email, role: user.Role },
        process.env.JWT_ACCESS_SECRET,
       { expiresIn: '7d' }
     );
@@ -81,16 +83,39 @@ class User {
 
     return user;
   }
+  
+
+  async updateProfile(userID,userData){
+
+    await db.UserModel.update(
+      {
+        Name: userData.name,
+        Email: userData.email,
+        PhoneNumber: userData.phoneNumber,
+      },
+      {
+        where: {
+          UserID: userID,
+        }
+      }
+     );
+
+  }
 
   async getVehicles(userID){
+     return VehicleService.getVehicles(userID);
+  }
 
-      const vehicle = await db.Vehicle.findAll({
-        where:{
-          UserID:userID
-        },
-      })
+  async addVehicle(userID,vehicleData){
+     return VehicleService.addVehicles(userID,vehicleData);
+  }
 
-      return vehicle;
+  async updateVehicle(vehicleData){
+    return VehicleService.updateVehicles(vehicleData);
+  }
+  
+  async deleteVehicle(VehicleID){
+    return VehicleService.deleteVehicle(VehicleID);
   }
 
   async getStationdata(location,type){
@@ -143,6 +168,19 @@ class User {
      return RealTimeUpdates.getStationAvailability(notifyData);
 
   }
+
+  async processPayment(userID,paymentData){
+
+     return BillingPayment.processpayment(userID,paymentData);
+
+  }
+
+  async getPaymentdetails(userID){
+
+    return BillingPayment.paymentDetails(userID);
+    
+ }
+
 
 }
 

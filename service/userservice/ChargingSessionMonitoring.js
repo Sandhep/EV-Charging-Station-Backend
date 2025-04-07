@@ -94,6 +94,14 @@ class ChargingSessionMonitoring {
         EnergyConsumed: session.progress,
         Cost: session.cost,
       });
+
+      if(session.BookingID){
+        await db.Booking.update(
+        { Status: "Completed" },
+        { where:{ BookingID: session.BookingID } }
+        );
+      }
+
     } catch (error) {
       console.error("Error Saving data in Database", error.message);
     }

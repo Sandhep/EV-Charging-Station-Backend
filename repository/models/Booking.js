@@ -21,7 +21,7 @@ export default (sequelize, DataTypes) => {
         },
       },
       VehicleID: {
-        type: DataTypes.STRING, // or DataTypes.UUID if this refers to a UUID
+        type: DataTypes.UUID, // or DataTypes.UUID if this refers to a UUID
         allowNull: false,
         validate: {
           notEmpty: true, // Ensures no empty strings are allowed

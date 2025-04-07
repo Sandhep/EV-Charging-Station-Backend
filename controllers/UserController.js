@@ -16,6 +16,19 @@ class UserController{
         }
     }
 
+    async updateUser(req,res){
+       
+      const{userID} = req.user;
+      const {userData} = req.body;
+      
+      try {
+           await User.updateProfile(userID,userData);
+           res.status(200).json({message:"User Updated"});
+         } catch (error) {
+           res.status(400).json({ message: error.message });
+       }
+    }
+
     async userLogin(req, res){
 
       const { email, password } = req.body;
@@ -129,9 +142,90 @@ class UserController{
        }
     }
 
+    async addVehicles(req,res){
 
-    
+      const {vehicleData} = req.body;
+      const {userID} = req.user;
 
+      try{
+
+       const userVehicle = await User.addVehicle(userID,vehicleData);
+       res.status(201).json(userVehicle);
+
+      }catch(error){
+
+        res.status(400).json({message:error.message});
+
+      }
+   }
+
+   async updateVehicles(req,res){
+
+    const {vehicleData} = req.body;
+
+    try{
+
+     const userVehicle = await User.updateVehicle(vehicleData);
+     res.status(200).json(userVehicle);
+
+    }catch(error){
+
+      res.status(400).json({message:error.message});
+
+    }
+
+    }
+
+    async deleteVehicle(req,res){
+
+      const {vehicleData} = req.body;
+  
+      try{
+  
+       const userVehicle = await User.deleteVehicle(vehicleData.VehicleID);
+
+       res.status(200).json({message:"Vehicle is deleted",userVehicle});
+  
+      }catch(error){
+  
+        res.status(400).json({message:error.message});
+  
+      }
+    }
+
+    async payment(req,res){
+
+       const {userID} = req.user;
+       const {paymentData} = req.body;
+
+       try{
+          
+         const paymentResponse = await User.processPayment(userID,paymentData);
+
+         res.status(200).json({message:"Payment Successfull !",paymentResponse});
+
+       }catch(error){
+         
+         res.status(400).json({message:error.message});
+
+       }
+    }
+
+    async getpaymentDetails(req,res) {
+      
+      const {userID} = req.user;
+
+      try{
+
+        const paymentDetails = await User.getPaymentdetails(userID);
+        res.status(200).json(paymentDetails);
+
+      }catch(error){
+
+        res.status(400).json({message:error.message});
+
+      }
+    }
 
 
 }

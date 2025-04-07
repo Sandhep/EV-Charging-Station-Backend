@@ -1,11 +1,12 @@
 export default (sequelize, DataTypes) => {
     const Vehicle = sequelize.define("Vehicle", {
       VehicleID: {
-        type: DataTypes.STRING, // or DataTypes.UUID if you want to use UUIDs
+        type: DataTypes.UUID, // or DataTypes.UUID if you want to use UUIDs
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4
       },
       UserID: {
-        type: DataTypes.STRING, // or DataTypes.UUID if this refers to a UUID
+        type: DataTypes.UUID, // or DataTypes.UUID if this refers to a UUID
         allowNull: false,
         validate: {
           notEmpty: true, // Ensures no empty strings are allowed
